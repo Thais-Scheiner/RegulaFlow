@@ -1,34 +1,30 @@
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using ComplaintIngestion.API.Models;
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace ComplaintIngestion.API.Services;
 
 public class SqsPublisherService
 {
     private readonly IAmazonSQS _sqsClient;
-    private readonly IConfiguration _configuration;
     private readonly ILogger<SqsPublisherService> _logger;
     private readonly string _queueUrl;
 
-    // Injetamos o cliente SQS, configurações e logger
+    // Injetamos o cliente SQS, configuraÃ§Ãµes e logger
     public SqsPublisherService(IAmazonSQS sqsClient, IConfiguration configuration, ILogger<SqsPublisherService> logger)
     {
         _sqsClient = sqsClient;
-        _configuration = configuration;
         _logger = logger;
-        // Lemos a URL da fila do appsettings.json
-        _queueUrl = _configuration["Aws:SqsQueueUrl"] ?? throw new ArgumentNullException("Aws:SqsQueueUrl cannot be null");
+        // Usando o parÃ¢metro 'configuration' diretamente e depois ele Ã© "descartado"
+        _queueUrl = configuration["Aws:SqsQueueUrl"] ?? throw new ArgumentNullException("Aws:SqsQueueUrl cannot be null");
     }
 
     public async Task PublishComplaintAsync(ComplaintRequest complaint)
     {
         try
         {
-            // Serializamos o objeto da reclamação para JSON
+            // Serializamos o objeto da reclamaÃ§Ã£o para JSON
             string messageBody = JsonSerializer.Serialize(complaint);
 
             var sendMessageRequest = new SendMessageRequest
@@ -37,7 +33,7 @@ public class SqsPublisherService
                 MessageBody = messageBody
             };
 
-            _logger.LogInformation("Enviando reclamação para a fila SQS: {QueueUrl}", _queueUrl);
+            _logger.LogInformation("Enviando reclamaÃ§Ã£o para a fila SQS: {QueueUrl}", _queueUrl);
 
             // Enviamos a mensagem para a fila
             var response = await _sqsClient.SendMessageAsync(sendMessageRequest);
@@ -47,8 +43,7 @@ public class SqsPublisherService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro ao enviar mensagem para SQS. Fila: {QueueUrl}", _queueUrl);
-            // Em um cenário real, poderíamos implementar retentativas ou DLQ aqui
-            throw; // Re-lança a exceção para o Controller saber que falhou
+            throw;
         }
     }
 }

@@ -5,7 +5,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do Serilog (continua igual)
+// ConfiguraÃ§Ã£o do Serilog (continua igual)
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
@@ -19,24 +19,24 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext()
     .WriteTo.Console());
 
-// Adicionar serviços ao container.
+// Adicionar serviÃ§os ao container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// --- CORREÇÃO APLICADA AQUI ---
-// 1. Lê a seção "Aws" do appsettings.json e configura as opções padrão da AWS
+// --- CORREÃ‡ÃƒO APLICADA AQUI ---
+// 1. LÃª a seÃ§Ã£o "Aws" do appsettings.json e configura as opÃ§Ãµes padrÃ£o da AWS
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 
-// 2. Registra o cliente SQS. Agora ele usará automaticamente a região configurada acima.
+// 2. Registra o cliente SQS. Agora ele usarÃ¡ automaticamente a regiÃ£o configurada acima.
 builder.Services.AddAWSService<IAmazonSQS>();
 
-// Registrar nosso serviço SQS (continua igual)
+// Registrar nosso serviÃ§o SQS (continua igual)
 builder.Services.AddScoped<SqsPublisherService>();
 
 var app = builder.Build();
 
-// Pipeline de requisições HTTP (continua igual)
+// Pipeline de requisiÃ§Ãµes HTTP (continua igual)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -51,14 +51,14 @@ app.MapControllers();
 // Bloco try-finally (continua igual)
 try
 {
-    Log.Information("Iniciando a API de Ingestão de Reclamações");
-    app.Run();
+    Log.Information("Iniciando a API de IngestÃ£o de ReclamaÃ§Ãµes");
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "A aplicação falhou ao iniciar");
+    Log.Fatal(ex, "A aplicaÃ§Ã£o falhou ao iniciar");
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

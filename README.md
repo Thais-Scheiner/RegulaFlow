@@ -22,7 +22,7 @@
 - [🔮 Próximos Passos (Melhorias)](#-próximos-passos-melhorias)
 - [✍️ Autora](#️-autora)
 
-## 🎯 Sobre o Projeto
+## 🎯 Sobre o Projeto 
 
 O **RegulaFlow** foi idealizado como uma resposta direta aos desafios de engenharia de software encontrados em **sistemas de missão crítica**, como os de gestão de reclamações regulatórias (Bacen, Procon) no setor financeiro. O objetivo foi construir uma solução em **.NET 8** que não apenas funcione, mas que seja **resiliente, escalável e auditável**, utilizando uma arquitetura de microserviços e serviços de nuvem da **AWS**.
 

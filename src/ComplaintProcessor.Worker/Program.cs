@@ -15,12 +15,12 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-        // 2. Configura os serviços da AWS, lendo a região do appsettings.json
+        // 2. Configura os serviÃ§os da AWS, lendo a regiÃ£o do appsettings.json
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonSQS>(); // Registra o cliente para SQS (receber mensagens)
         services.AddAWSService<IAmazonSimpleNotificationService>(); // Registra o cliente para SNS (enviar eventos)
 
-        // 3. Registra nosso Worker como o serviço principal a ser executado em background
+        // 3. Registra nosso Worker como o serviÃ§o principal a ser executado em background
         services.AddHostedService<Worker>();
     })
     .UseSerilog((context, services, configuration) => configuration // Configura o Serilog para logging
@@ -30,11 +30,11 @@ var host = Host.CreateDefaultBuilder(args)
         .WriteTo.Console())
     .Build();
 
-// garantir para que os logs sejam salvos em caso de erro na inicialização
+// garantir para que os logs sejam salvos em caso de erro na inicializaÃ§Ã£o
 try
 {
-    Log.Information("Iniciando o Worker de Processamento de Reclamações");
-    host.Run();
+    Log.Information("Iniciando o Worker de Processamento de ReclamaÃ§Ãµes");
+    await host.RunAsync();
 }
 catch (Exception ex)
 {
@@ -42,5 +42,5 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

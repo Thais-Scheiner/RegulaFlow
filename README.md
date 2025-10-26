@@ -1,4 +1,4 @@
-# RegulaFlow - Gestor de Reclamações Regulatórias
+# RegulaFlow - Gestor de Reclamações Regulatórias 
 
 ![Status](https://img.shields.io/badge/status-funcional-brightgreen)
 ![.NET](https://img.shields.io/badge/.NET-8-blueviolet)

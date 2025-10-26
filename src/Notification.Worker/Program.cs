@@ -7,7 +7,7 @@ var host = Host.CreateDefaultBuilder(args)
     {
         var configuration = hostContext.Configuration;
 
-        // Configura e registra os serviços da AWS
+        // Configura e registra os serviÃ§os da AWS
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonSQS>();
 
@@ -23,14 +23,14 @@ var host = Host.CreateDefaultBuilder(args)
 
 try
 {
-    Log.Information("Iniciando o Worker de Notificação");
-    host.Run();
+    Log.Information("Iniciando o Worker de NotificaÃ§Ã£o");
+    await host.RunAsync();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "O Worker de Notificação falhou ao iniciar");
+    Log.Fatal(ex, "O Worker de NotificaÃ§Ã£o falhou ao iniciar");
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
